@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoParts 360 — Accesorios Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --surface: #111114;
+    --card: #16161a;
+    --border: #2a2a32;
+    --accent: #e85c0a;
+    --accent2: #ff8c38;
+    --text: #f0eee8;
+    --muted: #888890;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,12,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cart {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: background 0.2s;
+  }
+  .nav-cart:hover { background: var(--accent2); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 80px 2rem 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(232,92,10,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    letter-spacing: 4px;
+    line-height: 0.95;
+    color: var(--white);
+    text-shadow: 0 0 80px rgba(232,92,10,0.3);
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    display: block;
+  }
+
+  .hero p {
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    margin-top: 24px;
+    background: var(--border);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    padding: 0 2rem 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .filter-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,92,10,0.08);
+  }
+
+  /* GRID */
+  .catalog {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  /* PRODUCT CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.2s; }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  .card:nth-child(6) { animation-delay: 0.3s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover::after { transform: scaleX(1); }
+
+  /* 360 VIEWER AREA */
+  .viewer-area {
+    height: 260px;
+    position: relative;
+    overflow: hidden;
+    background: #0d0d10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .viewer-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(232,92,10,0.9);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .viewer-hint {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+
+  .drag-icon { font-size: 1rem; animation: wiggle 2s ease-in-out infinite; }
+  @keyframes wiggle {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  /* CARD BODY */
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-category {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--accent2);
+    letter-spacing: 1px;
+  }
+
+  .price span {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 300;
+    display: block;
+    letter-spacing: 0;
+  }
+
+  .btn-add {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-add:hover { background: var(--accent2); transform: scale(1.05); }
+  .btn-add:active { transform: scale(0.97); }
+
+  /* STARS */
+  .stars { color: var(--accent2); font-size: 0.75rem; margin-bottom: 12px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(8px);
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.open .modal { transform: scale(1); }
+
+  .modal-viewer {
+    height: 380px;
+    background: #0a0a0d;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .modal-canvas { width: 100%; height: 100%; display: block; }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: var(--accent); }
+
+  .modal-body { padding: 28px; }
+
+  .modal-cat {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .modal-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .modal-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .spec-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+  }
+
+  .spec-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .spec-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .modal-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--accent2);
+    letter-spacing: 2px;
+  }
+
+  .btn-buy {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    transition: opacity 0.2s, transform 0.1s;
+  }
+
+  .btn-buy:hover { opacity: 0.85; }
+
+  .rotate-hint {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    pointer-events: none;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  footer strong { color: var(--accent); font-weight: 600; }
+
+  /* SCROLL BAR */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .catalog { grid-template-columns: 1fr; }
+    .modal-specs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Auto<span>Parts</span> 360</div>
+  <ul class="nav-links">
+    <li><a href="#">Catálogo</a></li>
+    <li><a href="#">Marcas</a></li>
+    <li><a href="#">Ofertas</a></li>
+    <li><a href="#">Contacto</a></li>
+  </ul>
+  <button class="nav-cart">🛒 Carrito (0)</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">⚡ Catálogo Premium 2025</p>
+  <h1>Accesorios<em>de Élite</em></h1>
+  <p>Equipa tu vehículo con los mejores accesorios del mercado. Visualiza cada producto en 360° antes de comprar.</p>
+  <div class="hero-badge">🔄 Visor 360° interactivo — arrastra para girar</div>
+</section>
+
+<!-- FILTERS -->
+<div class="filter-bar">
+  <span class="filter-label">Filtrar:</span>
+  <button class="filter-btn active" onclick="filterCards('all', this)">Todos</button>
+  <button class="filter-btn" onclick="filterCards('interior', this)">Interior</button>
+  <button class="filter-btn" onclick="filterCards('exterior', this)">Exterior</button>
+  <button class="filter-btn" onclick="filterCards('tech', this)">Tecnología</button>
+  <button class="filter-btn" onclick="filterCards('seguridad', this)">Seguridad</button>
+</div>
+
+<!-- CATALOG GRID -->
+<div class="catalog" id="catalog"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-viewer">
+      <canvas class="modal-canvas" id="modalCanvas"></canvas>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <div class="rotate-hint">↔ Arrastra para girar 360°</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-cat" id="mCat"></div>
+      <div class="modal-title" id="mTitle"></div>
+      <div id="mStars" class="stars"></div>
+      <div class="modal-desc" id="mDesc"></div>
+      <div class="modal-specs" id="mSpecs"></div>
+      <div class="modal-footer">
+        <div class="modal-price" id="mPrice"></div>
+        <button class="btn-buy" onclick="addToCart()">Agregar al carrito</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <strong>AutoParts 360</strong> — Todos los derechos reservados · Riobamba, Ecuador</p>
+  <p style="margin-top:6px;font-size:0.7rem;">Tecnología de visor 360° interactivo incluida</p>
+</footer>
+
+<script>
+// ===================== PRODUCTS DATA =====================
+const products = [
+  {
+    id: 1, category: 'interior', catLabel: 'Interior',
+    name: 'VOLANTE SPORT RS', stars: 5,
+    desc: 'Volante deportivo de cuero genuino con costuras en rojo. Compatible con la mayoría de vehículos. Incluye kit de instalación.',
+    price: '$89.99',
+    specs: [['Material','Cuero genuino'],['Diámetro','38 cm'],['Compatibilidad','Universal'],['Color','Negro / Rojo']],
+    color: '#c0392b', shape: 'wheel', highlight: '#ff6b6b'
+  },
+  {
+    id: 2, category: 'tech', catLabel: 'Tecnología',
+    name: 'CÁMARA DASHCAM 4K', stars: 5,
+    desc: 'Cámara de tablero 4K con visión nocturna, GPS integrado y pantalla táctil de 3". Detección de movimiento y grabación en loop.',
+    price: '$129.99',
+    specs: [['Resolución','4K Ultra HD'],['Pantalla','3" Táctil'],['GPS','Integrado'],['Ángulo','170°']],
+    color: '#1a1a2e', shape: 'cam', highlight: '#4fc3f7'
+  },
+  {
+    id: 3, category: 'interior', catLabel: 'Interior',
+    name: 'TAPETES 3D PREMIUM', stars: 4,
+    desc: 'Set de 4 tapetes en goma 3D de alta resistencia. Anti-deslizantes, impermeables y de fácil limpieza. Diseño personalizado por modelo.',
+    price: '$54.99',
+    specs: [['Material','Goma TPE 3D'],['Piezas','Set x4'],['Impermeable','Sí'],['Modelos','+200 vehículos']],
+    color: '#1b1b1b', shape: 'mat', highlight: '#e8a838'
+  },
+  {
+    id: 4, category: 'exterior', catLabel: 'Exterior',
+    name: 'LLANTAS SPORT 18"', stars: 5,
+    desc: 'Rines de aluminio forjado de 18 pulgadas. Acabado en negro mate con detalles dorados. Alta resistencia y diseño aerodinámico.',
+    price: '$349.99',
+    specs: [['Tamaño','18 pulgadas'],['Material','Aluminio forjado'],['Acabado','Negro mate'],['Cantidad','Set x4']],
+    color: '#1a1a1a', shape: 'rim', highlight: '#ffd700'
+  },
+  {
+    id: 5, category: 'seguridad', catLabel: 'Seguridad',
+    name: 'KIT SENSORES PARKING', stars: 4,
+    desc: 'Sistema de 4 sensores ultrasónicos con pantalla LED y alarma sonora. Instalación plug & play. Detección hasta 2.5 metros.',
+    price: '$44.99',
+    specs: [['Sensores','4 ultrasónicos'],['Display','LED digital'],['Rango','0 – 2.5 m'],['Instalación','Plug & Play']],
+    color: '#0d2137', shape: 'sensor', highlight: '#00e5ff'
+  },
+  {
+    id: 6, category: 'tech', catLabel: 'Tecnología',
+    name: 'RADIO ANDROID 10"', stars: 5,
+    desc: 'Autoradio con pantalla táctil 10" Android 11. GPS, WiFi, Bluetooth 5.0, CarPlay y Android Auto. 4GB RAM + 64GB ROM.',
+    price: '$219.99',
+    specs: [['Pantalla','10" IPS'],['Sistema','Android 11'],['RAM / ROM','4GB / 64GB'],['Bluetooth','5.0']],
+    color: '#0a0a15', shape: 'radio', highlight: '#7c4dff'
+  }
+];
+
+// ===================== 360 RENDERER =====================
+function draw360(canvas, product, angle) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width = canvas.offsetWidth || 320;
+  const H = canvas.height = canvas.offsetHeight || 260;
+  ctx.clearRect(0, 0, W, H);
+
+  // Background grid
+  ctx.fillStyle = '#0d0d10';
+  ctx.fillRect(0, 0, W, H);
+
+  const grd = ctx.createRadialGradient(W/2, H/2, 10, W/2, H/2, W*0.6);
+  grd.addColorStop(0, product.color + '55');
+  grd.addColorStop(1, 'transparent');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.translate(W/2, H/2);
+
+  const a = angle * Math.PI / 180;
+  const perspective = Math.cos(a * 0.5);
+
+  if (product.shape === 'wheel') drawWheel(ctx, a, perspective, product.highlight, W, H);
+  else if (product.shape === 'cam') drawCam(ctx, a, perspective, product.highlight, W, H);
+  else if (product.shape === 'mat') drawMat(ctx, a, perspective, product.highlight, W, H);
+  else if (product.shape === 'rim') drawRim(ctx, a, perspective, product.highlight, W, H);
+  else if (product.shape === 'sensor') drawSensor(ctx, a, perspective, product.highlight, W, H);
+  else if (product.shape === 'radio') drawRadio(ctx, a, perspective, product.highlight, W, H);
+
+  ctx.restore();
+
+  // Reflection floor
+  const floorGrad = ctx.createLinearGradient(0, H*0.65, 0, H);
+  floorGrad.addColorStop(0, product.highlight + '20');
+  floorGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = floorGrad;
+  ctx.fillRect(0, H*0.65, W, H*0.35);
+
+  // Degree indicator
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.font = '400 11px Barlow Condensed';
+  ctx.letterSpacing = '2px';
+  ctx.fillText(`${Math.round(angle % 360)}°`, W - 44, H - 14);
+}
+
+function drawWheel(ctx, a, p, col, W, H) {
+  const r = Math.min(W, H) * 0.32;
+  const sx = Math.cos(a) * 0.35 + 0.65;
+
+  // Outer ring shadow
+  ctx.shadowColor = col;
+  ctx.shadowBlur = 30;
+
+  // Outer ring
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * sx, r, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = col;
+  ctx.lineWidth = 8;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Inner ring
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * 0.7 * sx, r * 0.7, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Spokes
+  for (let i = 0; i < 5; i++) {
+    const ang = (i / 5) * Math.PI * 2 + a * 0.3;
+    const x1 = Math.cos(ang) * r * 0.12 * sx;
+    const y1 = Math.sin(ang) * r * 0.12;
+    const x2 = Math.cos(ang) * r * 0.7 * sx;
+    const y2 = Math.sin(ang) * r * 0.7;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = col + 'cc';
+    ctx.lineWidth = 5;
+    ctx.stroke();
+  }
+
+  // Center hub
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * 0.12 * sx, r * 0.12, 0, 0, Math.PI * 2);
+  ctx.fillStyle = col;
+  ctx.fill();
+
+  // Shine
+  ctx.beginPath();
+  ctx.ellipse(-r * 0.1 * sx, -r * 0.15, r * 0.25 * sx, r * 0.1, -0.5, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  ctx.fill();
+}
+
+function drawCam(ctx, a, p, col, W, H) {
+  const sx = Math.cos(a) * 0.4 + 0.6;
+  const bw = 140 * sx, bh = 80;
+
+  ctx.shadowColor = col;
+  ctx.shadowBlur = 25;
+
+  // Body
+  ctx.beginPath();
+  ctx.roundRect(-bw/2, -bh/2, bw, bh, 8);
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fill();
+  ctx.strokeStyle = col + '88';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+
+  // Screen
+  const sw = 70 * sx, sh = 50;
+  ctx.beginPath();
+  ctx.roundRect(-bw/2 + 10 * sx, -sh/2, sw, sh, 4);
+  ctx.fillStyle = '#0a1628';
+  ctx.fill();
+  ctx.strokeStyle = col + '44';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Screen glow
+  if (sx > 0.5) {
+    const screenGrd = ctx.createLinearGradient(-bw/2 + 10*sx, -sh/2, -bw/2 + 10*sx, sh/2);
+    screenGrd.addColorStop(0, col + '22');
+    screenGrd.addColorStop(1, col + '44');
+    ctx.fillStyle = screenGrd;
+    ctx.fill();
+  }
+
+  // Lens
+  const lx = bw/2 - 35 * sx;
+  ctx.beginPath();
+  ctx.arc(lx, 0, 22 * sx, 0, Math.PI * 2);
+  ctx.fillStyle = '#0a0a15';
+  ctx.fill();
+  ctx.strokeStyle = col;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(lx, 0, 14 * sx, 0, Math.PI * 2);
+  ctx.fillStyle = col + '33';
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(lx - 3*sx, -3, 5 * sx, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.fill();
+}
+
+function drawMat(ctx, a, p, col, W, H) {
+  const sx = Math.cos(a) * 0.6 + 0.4;
+  const w = 180 * sx, h = 120;
+
+  ctx.shadowColor = col;
+  ctx.shadowBlur = 20;
+
+  // Mat body
+  ctx.beginPath();
+  ctx.roundRect(-w/2, -h/2, w, h, 6);
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fill();
+  ctx.strokeStyle = col + '99';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Grid pattern
+  if (sx > 0.3) {
+    ctx.strokeStyle = col + '22';
+    ctx.lineWidth = 1;
+    for (let i = -4; i <= 4; i++) {
+      const gx = i * (w / 8);
+      ctx.beginPath();
+      ctx.moveTo(gx, -h/2 + 4);
+      ctx.lineTo(gx, h/2 - 4);
+      ctx.stroke();
+    }
+    for (let i = -3; i <= 3; i++) {
+      const gy = i * (h / 6);
+      ctx.beginPath();
+      ctx.moveTo(-w/2 + 4, gy);
+      ctx.lineTo(w/2 - 4, gy);
+      ctx.stroke();
+    }
+  }
+
+  // Border strip
+  ctx.beginPath();
+  ctx.roundRect(-w/2 + 8, -h/2 + 8, w - 16, h - 16, 4);
+  ctx.strokeStyle = col + 'cc';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Logo placeholder
+  ctx.fillStyle = col + '66';
+  ctx.font = `bold ${14 * sx}px Bebas Neue, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  if (sx > 0.4) ctx.fillText('PREMIUM', 0, 0);
+}
+
+function drawRim(ctx, a, p, col, W, H) {
+  const r = Math.min(W, H) * 0.34;
+  const sx = Math.cos(a) * 0.35 + 0.65;
+
+  ctx.shadowColor = col;
+  ctx.shadowBlur = 30;
+
+  // Tire
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * sx, r, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 14;
+  ctx.stroke();
+
+  // Rim outer
+  ctx.beginPath();
+  ctx.ellipse(0, 0, (r - 10) * sx, r - 10, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#111';
+  ctx.fill();
+  ctx.strokeStyle = '#444';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Spokes (5 double spokes)
+  for (let i = 0; i < 5; i++) {
+    const ang = (i / 5) * Math.PI * 2 + a * 0.5;
+    const offAng = 0.15;
+    for (let s = -1; s <= 1; s += 2) {
+      const a2 = ang + s * offAng;
+      const x1 = Math.cos(a2) * (r - 22) * sx;
+      const y1 = Math.sin(a2) * (r - 22);
+      const x2 = Math.cos(a2) * 18 * sx;
+      const y2 = Math.sin(a2) * 18;
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x1, y1);
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    }
+  }
+
+  // Center cap
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 18 * sx, 18, 0, 0, Math.PI * 2);
+  ctx.fillStyle = col;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 8 * sx, 8, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#111';
+  ctx.fill();
+}
+
+function drawSensor(ctx, a, p, col, W, H) {
+  const sx = Math.cos(a) * 0.4 + 0.6;
+
+  // Display box
+  ctx.shadowColor = col;
+  ctx.shadowBlur = 20;
+  const bw = 120 * sx, bh = 60;
+  ctx.beginPath();
+  ctx.roundRect(-bw/2, -bh - 10, bw, bh, 6);
+  ctx.fillStyle = '#0d2137';
+  ctx.fill();
+  ctx.strokeStyle = col + '88';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // LED display content
+  if (sx > 0.4) {
+    ctx.font = `bold ${22 * sx}px monospace`;
+    ctx.fillStyle = col;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('1.2m', 0, -bh/2 - 10);
+  }
+
+  // Bar graph
+  const bars = [0.3, 0.5, 0.8, 1.0];
+  bars.forEach((v, i) => {
+    const bx = (-bw/2 + 16 + i * 26) * sx;
+    const bHeight = v * 20;
+    ctx.fillStyle = v > 0.7 ? '#e74c3c' : v > 0.4 ? '#f39c12' : col;
+    ctx.fillRect(bx, -bh + 8, 10 * sx, bHeight);
+  });
+
+  // Sensors
+  for (let i = 0; i < 4; i++) {
+    const sx2 = (-60 + i * 40) * sx;
+    ctx.beginPath();
+    ctx.roundRect(sx2 - 8 * sx, 20, 16 * sx, 30, 3);
+    ctx.fillStyle = '#1a2a3a';
+    ctx.fill();
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(sx2, 35, 5 * sx, 0, Math.PI * 2);
+    ctx.fillStyle = col + 'cc';
+    ctx.fill();
+
+    // Sonar waves
+    for (let w = 1; w <= 2; w++) {
+      ctx.beginPath();
+      ctx.arc(sx2, 35, (10 + w * 12) * sx, Math.PI, 0);
+      ctx.strokeStyle = col + (w === 1 ? '55' : '22');
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+}
+
+function drawRadio(ctx, a, p, col, W, H) {
+  const sx = Math.cos(a) * 0.4 + 0.6;
+  const bw = 200 * sx, bh = 110;
+
+  ctx.shadowColor = col;
+  ctx.shadowBlur = 25;
+
+  // Unit body
+  ctx.beginPath();
+  ctx.roundRect(-bw/2, -bh/2, bw, bh, 6);
+  ctx.fillStyle = '#0a0a15';
+  ctx.fill();
+  ctx.strokeStyle = col + '66';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Screen area
+  const sw = 160 * sx, sh = 88;
+  ctx.beginPath();
+  ctx.roundRect(-sw/2, -sh/2, sw, sh, 4);
+  ctx.fillStyle = '#050510';
+  ctx.fill();
+
+  // Screen content glow
+  const screenGlow = ctx.createRadialGradient(0, 0, 5, 0, 0, sw * 0.5);
+  screenGlow.addColorStop(0, col + '33');
+  screenGlow.addColorStop(1, 'transparent');
+  ctx.fillStyle = screenGlow;
+  ctx.fillRect(-sw/2, -sh/2, sw, sh);
+
+  if (sx > 0.5) {
+    // Map-like content
+    ctx.strokeStyle = col + '44';
+    ctx.lineWidth = 1;
+    for (let i = -4; i <= 4; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * 18 * sx, -sh/2);
+      ctx.lineTo(i * 18 * sx, sh/2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-sw/2, i * 10);
+      ctx.lineTo(sw/2, i * 10);
+      ctx.stroke();
+    }
+
+    // GPS pin
+    ctx.beginPath();
+    ctx.arc(10 * sx, -5, 5 * sx, 0, Math.PI * 2);
+    ctx.fillStyle = col;
+    ctx.fill();
+
+    // Clock
+    ctx.font = `${10 * sx}px monospace`;
+    ctx.fillStyle = col + 'cc';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText('10:45', -sw/2 + 6, -sh/2 + 5);
+    ctx.fillText('GPS', sw/2 - 28, -sh/2 + 5);
+  }
+
+  // Side buttons
+  for (let i = 0; i < 3; i++) {
+    const by = -20 + i * 20;
+    ctx.fillStyle = '#222';
+    ctx.fillRect(bw/2 - 5, by - 6, 5 * sx, 12);
+  }
+}
+
+// ===================== RENDER CARDS =====================
+function renderCards(filter = 'all') {
+  const catalog = document.getElementById('catalog');
+  catalog.innerHTML = '';
+  const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+
+  filtered.forEach(prod => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.category = prod.category;
+    card.innerHTML = `
+      <div class="viewer-area">
+        <canvas class="product-canvas" id="canvas-${prod.id}"></canvas>
+        <div class="viewer-badge">🔄 360°</div>
+        <div class="viewer-hint"><span class="drag-icon">↔</span> Arrastra para girar</div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">${prod.catLabel}</div>
+        <div class="card-title">${prod.name}</div>
+        <div class="stars">${'★'.repeat(prod.stars)}${'☆'.repeat(5-prod.stars)}</div>
+        <div class="card-desc">${prod.desc}</div>
+        <div class="card-footer">
+          <div class="price">${prod.price}<span>IVA incluido</span></div>
+          <button class="btn-add" onclick="event.stopPropagation(); addToCart()">+ Añadir</button>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => openModal(prod));
+    catalog.appendChild(card);
+    initDrag(`canvas-${prod.id}`, prod);
+  });
+}
+
+// ===================== DRAG 360 =====================
+function initDrag(canvasId, prod, isModal = false) {
+  setTimeout(() => {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    let angle = 20;
+    let dragging = false;
+    let lastX = 0;
+    let animFrame;
+
+    function render() { draw360(canvas, prod, angle); }
+
+    // Auto-rotate
+    let autoAngle = angle;
+    function autoSpin() {
+      if (!dragging) {
+        autoAngle += 0.4;
+        angle = autoAngle;
+        render();
+      }
+      animFrame = requestAnimationFrame(autoSpin);
+    }
+    autoSpin();
+
+    canvas.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; });
+    canvas.addEventListener('touchstart', e => { dragging = true; lastX = e.touches[0].clientX; }, { passive: true });
+
+    window.addEventListener('mousemove', e => {
+      if (dragging) {
+        angle += (e.clientX - lastX) * 0.8;
+        autoAngle = angle;
+        lastX = e.clientX;
+        render();
+      }
+    });
+
+    window.addEventListener('touchmove', e => {
+      if (dragging) {
+        angle += (e.touches[0].clientX - lastX) * 0.8;
+        autoAngle = angle;
+        lastX = e.touches[0].clientX;
+        render();
+      }
+    }, { passive: true });
+
+    window.addEventListener('mouseup', () => { dragging = false; });
+    window.addEventListener('touchend', () => { dragging = false; });
+
+    canvas._stopAnim = () => cancelAnimationFrame(animFrame);
+    render();
+  }, 100);
+}
+
+// ===================== MODAL =====================
+let currentProduct = null;
+
+function openModal(prod) {
+  currentProduct = prod;
+  const modal = document.getElementById('modal');
+  document.getElementById('mCat').textContent = prod.catLabel;
+  document.getElementById('mTitle').textContent = prod.name;
+  document.getElementById('mStars').textContent = '★'.repeat(prod.stars) + '☆'.repeat(5 - prod.stars);
+  document.getElementById('mDesc').textContent = prod.desc;
+  document.getElementById('mPrice').textContent = prod.price;
+
+  const specsEl = document.getElementById('mSpecs');
+  specsEl.innerHTML = prod.specs.map(s =>
+    `<div class="spec-item"><div class="spec-label">${s[0]}</div><div class="spec-value">${s[1]}</div></div>`
+  ).join('');
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  setTimeout(() => {
+    const canvas = document.getElementById('modalCanvas');
+    canvas.id = 'modalCanvas-' + prod.id;
+    initDrag('modalCanvas-' + prod.id, prod, true);
+  }, 100);
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===================== FILTER =====================
+function filterCards(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards(filter);
+}
+
+// ===================== CART =====================
+let cartCount = 0;
+function addToCart() {
+  cartCount++;
+  document.querySelector('.nav-cart').textContent = `🛒 Carrito (${cartCount})`;
+  const btn = event.target;
+  const original = btn.textContent;
+  btn.textContent = '✓ Agregado!';
+  btn.style.background = '#27ae60';
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.style.background = '';
+  }, 1500);
+}
+
+// ===================== INIT =====================
+renderCards();
+</script>
+</body>
+</html>
